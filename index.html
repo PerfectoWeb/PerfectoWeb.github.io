@@ -293,7 +293,8 @@ li img {
    rather than assumed. */
 .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 
-.tags span {
+.tags > span,
+.tags > a {
     padding: 2px 9px;
     border: 1px solid var(--rule);
     border-radius: 999px;
@@ -306,14 +307,25 @@ li img {
 /* One of them carries weight, so it is the one the eye lands on. */
 .tags .lic { color: var(--ink); border-color: color-mix(in srgb, var(--ink) 26%, transparent); }
 
-/* A chip that goes somewhere looks like it does. */
-.tags a.tag { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 34%, transparent); }
-
-@media (prefers-reduced-motion: no-preference) {
-    .tags a.tag { transition: background 0.16s ease-out; }
+/* A chip that goes somewhere is still a chip. It carries a mark instead of a
+   colour: blue made it the loudest thing in the row, and a secondary link is not
+   that. What says it is a link is the pointer and the hover. */
+.tags a.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.tags a.tag:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.tags a.tag svg { width: 12px; height: 12px; }
+
+@media (prefers-reduced-motion: no-preference) {
+    .tags a.tag { transition: background 0.16s ease-out, color 0.16s ease-out; }
+}
+
+.tags a.tag:hover {
+    color: var(--ink);
+    background: color-mix(in srgb, var(--ink) 8%, transparent);
+}
 
 /* The number of installs. An icon and a figure, because "6,528" on its own is a
    number with no unit, and spelling out "installs" beside every one of them
@@ -335,6 +347,25 @@ li img {
    `position: relative` goes on the chip; the arrow is the same box rotated. */
 [data-tip] { position: relative; }
 
+/* The arrow. A square turned forty five degrees, so it is the same colour as the
+   bubble by construction rather than by a second declaration to keep in step. It
+   is `::before` and the bubble is `::after`, which also fixes the stacking: the
+   bubble is painted last and covers the half of the square that would otherwise
+   show through its corner. */
+[data-tip]::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    width: 9px;
+    height: 9px;
+    border-radius: 1px;
+    background: var(--ink);
+    transform: translateX(-50%) rotate(45deg) translateY(3px);
+    opacity: 0;
+    pointer-events: none;
+}
+
 [data-tip]::after {
     content: attr(data-tip);
     position: absolute;
@@ -344,11 +375,11 @@ li img {
     z-index: 3;
     width: max-content;
     max-width: 15rem;
-    padding: 6px 10px;
-    border-radius: 8px;
+    padding: 8px 12px;
+    border-radius: 12px;
     background: var(--ink);
     color: var(--page);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 400;
     line-height: 1.4;
     letter-spacing: 0;
@@ -359,13 +390,20 @@ li img {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    [data-tip]::after { transition: opacity 0.14s ease-out, transform 0.14s ease-out; }
+    [data-tip]::after,
+    [data-tip]::before { transition: opacity 0.14s ease-out, transform 0.14s ease-out; }
 }
 
 [data-tip]:hover::after,
 [data-tip]:focus-visible::after {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+}
+
+[data-tip]:hover::before,
+[data-tip]:focus-visible::before {
+    opacity: 1;
+    transform: translateX(-50%) rotate(45deg);
 }
 
 @media (max-width: 560px) {
@@ -457,7 +495,7 @@ public, and none of it wants an account.</p>
         <div class="text">
             <p class="name"><a href="https://github.com/PerfectoWeb/nova-perfectdark-theme">Nova: Perfect Dark</a><span class="where">GitHub</span></p>
             <p class="what">An easy-on-the-eyes dark theme for Panic's Nova.</p>
-            <p class="tags"><span class="lic">MIT</span><span>Nova</span><a class="tag site" href="https://extensions.panic.com/extensions/perfectoweb/perfectoweb.PerfectDark/">Extension Library</a><span class="tag count" data-tip="Total installs from the Nova Extension Library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.6v9.4M8.4 10.4 12 14l3.6-3.6M5 18.4h14"/></svg>6,528</span></p>
+            <p class="tags"><span class="lic">MIT</span><span>Nova</span><a class="tag site" href="https://extensions.panic.com/extensions/perfectoweb/perfectoweb.PerfectDark/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9S14.5 18.5 12 21c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z"/></svg>Site</a><span class="tag count" data-tip="Total installs from the Nova Extension Library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.6v9.4M8.4 10.4 12 14l3.6-3.6M5 18.4h14"/></svg>6,528</span></p>
         </div>
     </li>
     <li>
@@ -465,7 +503,7 @@ public, and none of it wants an account.</p>
         <div class="text">
             <p class="name"><a href="https://github.com/PerfectoWeb/nova-favicon-clip">Nova: Favicon Clip</a><span class="where">GitHub</span></p>
             <p class="what">Generates the whole favicon tag set for every platform, without leaving the editor.</p>
-            <p class="tags"><span class="lic">MIT</span><span>Nova</span><a class="tag site" href="https://extensions.panic.com/extensions/perfectoweb/perfectoweb.favicon/">Extension Library</a><span class="tag count" data-tip="Total installs from the Nova Extension Library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.6v9.4M8.4 10.4 12 14l3.6-3.6M5 18.4h14"/></svg>4,159</span></p>
+            <p class="tags"><span class="lic">MIT</span><span>Nova</span><a class="tag site" href="https://extensions.panic.com/extensions/perfectoweb/perfectoweb.favicon/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9S14.5 18.5 12 21c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z"/></svg>Site</a><span class="tag count" data-tip="Total installs from the Nova Extension Library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.6v9.4M8.4 10.4 12 14l3.6-3.6M5 18.4h14"/></svg>4,159</span></p>
         </div>
     </li>
     <li>
@@ -473,7 +511,7 @@ public, and none of it wants an account.</p>
         <div class="text">
             <p class="name"><a href="https://github.com/PerfectoWeb/nova-lorem-clip">Nova: Lorem Clip</a><span class="where">GitHub</span></p>
             <p class="what">Lorem ipsum without leaving the editor.</p>
-            <p class="tags"><span class="lic">MIT</span><span>Nova</span><a class="tag site" href="https://extensions.panic.com/extensions/perfectoweb/perfectoweb.lorem/">Extension Library</a><span class="tag count" data-tip="Total installs from the Nova Extension Library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.6v9.4M8.4 10.4 12 14l3.6-3.6M5 18.4h14"/></svg>7,516</span></p>
+            <p class="tags"><span class="lic">MIT</span><span>Nova</span><a class="tag site" href="https://extensions.panic.com/extensions/perfectoweb/perfectoweb.lorem/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9S14.5 18.5 12 21c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z"/></svg>Site</a><span class="tag count" data-tip="Total installs from the Nova Extension Library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.6v9.4M8.4 10.4 12 14l3.6-3.6M5 18.4h14"/></svg>7,516</span></p>
         </div>
     </li>
 </ul>
