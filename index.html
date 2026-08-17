@@ -16,11 +16,7 @@
 <link rel="icon" href="https://perfectoweb.github.io/Belay/favicon.ico" sizes="32x32">
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8999ea5c44b046c19a08dcf09d5b4336"}'></script>
 <style>
-/* Self-contained on purpose. This page is the root of the whole account and must
-   not depend on any project's stylesheet: Belay's is cache-busted on every build,
-   and a root that breaks when a project rebuilds is a bad root. The tokens, the
-   type and the buttons are deliberately the same as the Belay site, so the two
-   read as one hand. */
+/* Self-contained: no external CSS, fonts or scripts. */
 :root {
     color-scheme: light dark;
     --ink: #12161d;
@@ -55,7 +51,7 @@ body {
 
 .wrap { max-width: 46rem; margin: 0 auto; }
 
-/* The masthead, the same lockup and spacing the Belay site uses. */
+/* Hero */
 header.top {
     display: flex;
     align-items: center;
@@ -68,8 +64,6 @@ header.top {
 
 header.top svg { width: 26px; height: 26px; flex: none; color: var(--accent); }
 
-/* Two weights in one word, so the name reads as two parts without a space or a
-   colour change to separate them. */
 header.top .thin { font-weight: 300; }
 
 h1 {
@@ -86,8 +80,7 @@ h1 {
     font-size: 18px;
 }
 
-/* The two buttons, lifted from the Belay site so the family holds: one primary
-   that is the thing to press, one outlined sibling beside it. */
+/* Actions */
 .actions {
     display: flex;
     flex-wrap: wrap;
@@ -95,10 +88,6 @@ h1 {
     margin-top: 28px;
 }
 
-/* Equal width on anything wide enough to spare it, because two buttons of
-   almost the same size are more distracting than two of exactly the same size.
-   A minimum rather than a fixed width, so a longer translation grows the pair
-   instead of clipping one of them. */
 @media (min-width: 561px) {
     .actions .button { min-width: 190px; }
 }
@@ -115,9 +104,6 @@ h1 {
     border: 1px solid transparent;
 }
 
-/* The two lines are one lockup, so they sit at their own leading rather than at
-   the page's reading leading, which left a gap between them wide enough to read
-   as two separate things. */
 .button .lines {
     display: inline-flex;
     flex-direction: column;
@@ -143,10 +129,6 @@ h1 {
 
 .button { transition: border-color 0.15s ease-in-out, filter 0.15s ease-in-out; }
 
-/* The same pair of answers the Belay site gives: the primary brightens, the
-   outlined one lifts its border. Nothing moves, so the thing you aimed at is
-   still where you aimed. The border is mixed from the ink rather than set to
-   white, because white on a white page says nothing. */
 .button:hover { filter: brightness(1.12); }
 
 .button.secondary:hover {
@@ -154,9 +136,6 @@ h1 {
     border-color: color-mix(in srgb, var(--ink) 38%, transparent);
 }
 
-/* Breathing and a glow on the primary, and for the same reason as on the Belay
-   site: beside a second button of nearly the same size, colour alone does not
-   say "this is the answer". Nothing here moves the button. */
 @media (prefers-reduced-motion: no-preference) {
     .button.primary {
         animation: button-breath 3.2s ease-in-out infinite;
@@ -168,10 +147,6 @@ h1 {
     50% { box-shadow: 0 6px 26px rgba(113, 51, 238, 0.45); filter: brightness(1.06); }
 }
 
-/* Sparks leaving the top of the primary. Six of them, each with its own size,
-   start, distance and timing written into the markup: CSS has no randomness, and
-   six specs chosen by hand read as random while staying the same on every visit,
-   which a random function would not. */
 .sparks {
     position: absolute;
     inset: 0;
@@ -199,8 +174,6 @@ h1 {
 @keyframes spark-fly {
     0% { opacity: 0; transform: translateY(0) rotate(45deg) scale(0.5); }
     15% { opacity: 0.95; }
-    /* Out before it stops: a spark that vanishes at full brightness reads as a
-       dropped frame. */
     75% { opacity: 0; }
     100% { opacity: 0; transform: translateY(calc(var(--rise) * -1)) rotate(45deg) scale(1); }
 }
@@ -212,8 +185,7 @@ hr {
     background: var(--rule);
 }
 
-/* Section headings carry a monochrome mark. Drawn inline rather than fetched, so
-   the page still has nothing to load but its own thumbnails. */
+/* Project list */
 h2 {
     display: flex;
     align-items: center;
@@ -232,10 +204,6 @@ ul { margin: 16px 0 0; padding: 0; list-style: none; }
 
 li + li { margin-top: 4px; }
 
-/* One row per project: the cover on the left, the words on the right. The row
-   used to be a single link, which was a better tap target and stopped being
-   possible the moment a project needed a second link of its own. The title and
-   the cover both carry it now, and the row still lights up as one thing. */
 li {
     display: grid;
     grid-template-columns: 132px 1fr;
@@ -260,9 +228,6 @@ li a { color: inherit; text-decoration: none; }
 
 .cover { display: block; }
 
-/* Its own radius rather than the page's, because a screenshot with square
-   corners inside a rounded layout reads as something pasted on. The ratio is
-   held by `aspect-ratio` so a slow image does not move the text under it. */
 li img {
     display: block;
     width: 100%;
@@ -287,10 +252,7 @@ li img {
 
 .what { display: block; margin-top: 2px; color: var(--soft); font-size: 15px; }
 
-/* What each project actually is, in three words. The licence chip is the point
-   of the row: it is the difference between a thing you may build on and a thing
-   you may only look at, and every one of them here is taken from the repository
-   rather than assumed. */
+/* Tags */
 .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 
 .tags > span,
@@ -304,19 +266,12 @@ li img {
     letter-spacing: 0.01em;
 }
 
-/* One of them carries weight, so it is the one the eye lands on, and it is the
-   only filled chip in the row. Filled from `--ink` on `--page` rather than from
-   literal white and black, so it inverts with the theme instead of turning into
-   a glaring white pill on a light page. */
 .tags .lic {
     background: var(--ink);
     border-color: var(--ink);
     color: var(--page);
 }
 
-/* A chip that goes somewhere is still a chip. It carries a mark instead of a
-   colour: blue made it the loudest thing in the row, and a secondary link is not
-   that. What says it is a link is the pointer and the hover. */
 .tags a.tag {
     display: inline-flex;
     align-items: center;
@@ -334,9 +289,6 @@ li img {
     background: color-mix(in srgb, var(--ink) 8%, transparent);
 }
 
-/* The number of installs. An icon and a figure, because "6,528" on its own is a
-   number with no unit, and spelling out "installs" beside every one of them
-   would crowd the row. What it means arrives on hover instead. */
 .tags .count {
     display: inline-flex;
     align-items: center;
@@ -346,17 +298,9 @@ li img {
 
 .tags .count svg { width: 12px; height: 12px; }
 
-/* Our own tooltip rather than `title`, which waits a second, cannot be styled,
-   and never appears on a touch screen at all. This one is a pseudo-element, so
-   it costs no markup and no script.
-   `position: relative` goes on the chip; the arrow is the same box rotated. */
+/* Tooltips */
 [data-tip] { position: relative; }
 
-/* The arrow. A square turned forty five degrees, so it is the same colour as the
-   bubble by construction rather than by a second declaration to keep in step. It
-   is `::before` and the bubble is `::after`, which also fixes the stacking: the
-   bubble is painted last and covers the half of the square that would otherwise
-   show through its corner. */
 [data-tip]::before {
     content: "";
     position: absolute;
@@ -416,6 +360,7 @@ li img {
     .actions .button { flex: 1 1 100%; justify-content: flex-start; }
 }
 
+/* Footer */
 footer {
     margin-top: 56px;
     padding-top: 20px;
@@ -426,9 +371,6 @@ footer {
 
 .links { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
 
-/* Underlined at rest and bare on hover, which is the opposite of the usual and
-   deliberate: the link is obviously a link before you touch it, and losing the
-   rule is the thing that tells you the pointer has landed. */
 .links a {
     display: inline-flex;
     align-items: center;
