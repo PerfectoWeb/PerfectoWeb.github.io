@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PerfectoWeb</title>
-<meta name="description" content="Small, sharp tools for macOS and for hardware. Free, open source, and none of them want an account.">
+<title>Perfecto Web</title>
+<meta name="description" content="Global digital agency. Small, sharp tools for macOS and for hardware: free, open source, and none of them want an account.">
 <meta name="author" content="PerfectoWeb">
 <link rel="canonical" href="https://perfectoweb.github.io/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="PerfectoWeb">
-<meta property="og:description" content="Small, sharp tools for macOS and for hardware. Free, open source, and none of them want an account.">
+<meta property="og:title" content="Perfecto Web">
+<meta property="og:description" content="Global digital agency. Small, sharp tools for macOS and for hardware: free, open source, and none of them want an account.">
 <meta property="og:url" content="https://perfectoweb.github.io/">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0d1016" media="(prefers-color-scheme: dark)">
@@ -18,13 +18,15 @@
 <style>
 /* Self-contained on purpose. This page is the root of the whole account and must
    not depend on any project's stylesheet: Belay's is cache-busted on every build,
-   and a root that breaks when a project rebuilds is a bad root. Same tokens as
-   the Belay site, so the two read as one hand. */
+   and a root that breaks when a project rebuilds is a bad root. The tokens, the
+   type and the buttons are deliberately the same as the Belay site, so the two
+   read as one hand. */
 :root {
     color-scheme: light dark;
     --ink: #12161d;
     --soft: #4a5464;
     --page: #ffffff;
+    --panel: #f4f6fa;
     --rule: #dfe4ec;
     --accent: #1f6bff;
 }
@@ -34,6 +36,7 @@
         --ink: #eef2f8;
         --soft: #98a3b4;
         --page: #0d1016;
+        --panel: #151a22;
         --rule: #252c38;
         --accent: #5b93ff;
     }
@@ -50,25 +53,93 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-.wrap { max-width: 40rem; margin: 0 auto; }
+.wrap { max-width: 46rem; margin: 0 auto; }
 
-header { padding: 72px 0 8px; }
+/* The masthead, the same lockup and spacing the Belay site uses. */
+header.top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 40px 0 8px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+header.top svg { width: 26px; height: 26px; flex: none; color: var(--accent); }
 
 h1 {
-    margin: 0;
-    font-size: clamp(30px, 6vw, 38px);
+    margin: 32px 0 0;
+    font-size: clamp(36px, 6vw, 44px);
+    line-height: 1.12;
     letter-spacing: -0.03em;
-    line-height: 1.15;
 }
 
 .lede {
     margin: 12px 0 0;
+    max-width: 34rem;
     color: var(--soft);
     font-size: 18px;
 }
 
-h2 {
+/* The two buttons, lifted from the Belay site so the family holds: one primary
+   that is the thing to press, one outlined sibling beside it. */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 22px;
+    min-height: 62px;
+    border-radius: 16px;
+    text-decoration: none;
+    border: 1px solid transparent;
+}
+
+.button .lines { display: inline-flex; flex-direction: column; gap: 1px; }
+.button .lead { font-size: 17px; font-weight: 700; }
+.button .under { font-size: 12px; font-weight: 400; opacity: 0.72; }
+.button svg { width: 22px; height: 22px; flex: none; }
+
+.button.primary {
+    background: linear-gradient(#7133ee, #6525e6);
+    color: #fff;
+}
+
+.button.secondary {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--rule);
+}
+
+.button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: no-preference) {
+    .button { transition: transform 0.16s ease-out, background 0.16s ease-out; }
+    .button.primary:hover { transform: translateY(-1px); }
+    .button.secondary:hover { background: var(--panel); }
+}
+
+hr {
+    height: 1px;
     margin: 56px 0 0;
+    border: 0;
+    background: var(--rule);
+}
+
+/* Section headings carry a monochrome mark. Drawn inline rather than fetched, so
+   the page still has nothing to load but its own thumbnails. */
+h2 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 48px 0 0;
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -76,26 +147,46 @@ h2 {
     color: var(--soft);
 }
 
-ul { margin: 14px 0 0; padding: 0; list-style: none; }
+h2 svg { width: 15px; height: 15px; flex: none; }
 
-li + li { margin-top: 2px; }
+ul { margin: 16px 0 0; padding: 0; list-style: none; }
 
-/* One row per project: the name carries the link, the line under it says what the
-   thing is. Padding rather than margins, so the whole row is the target on a
-   phone. */
+li + li { margin-top: 4px; }
+
+/* One row per project: the cover on the left, the words on the right, and the
+   whole row is the link so a thumb has something to hit. */
 li a {
-    display: block;
-    padding: 13px 14px;
-    margin: 0 -14px;
-    border-radius: 12px;
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 12px;
+    margin: 0 -12px;
+    border-radius: 14px;
     color: inherit;
     text-decoration: none;
-    transition: background 0.16s ease-out;
 }
 
-li a:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
+@media (prefers-reduced-motion: no-preference) {
+    li a { transition: background 0.16s ease-out; }
+}
+
+li a:hover { background: var(--panel); }
 
 li a:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* Its own radius rather than the page's, because a screenshot with square
+   corners inside a rounded layout reads as something pasted on. The ratio is
+   held by `aspect-ratio` so a slow image does not move the text under it. */
+li img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 8 / 5;
+    object-fit: cover;
+    border-radius: 10px;
+    background: var(--panel);
+}
 
 .name { font-weight: 700; }
 
@@ -107,79 +198,152 @@ li a:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
     color: var(--soft);
 }
 
-.what { display: block; color: var(--soft); font-size: 15px; }
+.what { display: block; margin-top: 2px; color: var(--soft); font-size: 15px; }
+
+@media (max-width: 560px) {
+    li a { grid-template-columns: 96px 1fr; gap: 12px; }
+    .actions .button { flex: 1 1 100%; justify-content: flex-start; }
+}
 
 footer {
-    margin-top: 64px;
+    margin-top: 56px;
     padding-top: 20px;
     border-top: 1px solid var(--rule);
     color: var(--soft);
     font-size: 15px;
 }
 
-footer a { color: var(--accent); }
+.links { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
+
+/* Underlined at rest and bare on hover, which is the opposite of the usual and
+   deliberate: the link is obviously a link before you touch it, and losing the
+   rule is the thing that tells you the pointer has landed. */
+.links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.links a:hover { text-decoration: none; }
+
+.links svg { width: 16px; height: 16px; flex: none; }
+
+footer p { margin: 14px 0 0; max-width: 40rem; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-<header>
-    <h1>PerfectoWeb</h1>
-    <p class="lede">Small, sharp tools for macOS and for hardware. Free, open
-    source, and none of them want an account.</p>
+<header class="top">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l1.5 5.1a4 4 0 0 0 2.7 2.7l5.2 1.6-5.2 1.6a4 4 0 0 0-2.7 2.7L12 21.4l-1.5-5.1a4 4 0 0 0-2.7-2.7L2.6 12l5.2-1.6a4 4 0 0 0 2.7-2.7L12 2.6z"/></svg>
+    PerfectoWeb
 </header>
 
-<h2>macOS</h2>
+<h1>Global Digital Agency</h1>
+
+<p class="lede">We build for the web by day, and small sharp tools for macOS and
+for hardware the rest of the time. Everything on this page is free, the source is
+public, and none of it wants an account.</p>
+
+<div class="actions">
+    <a class="button primary" href="https://perfecto-web.com" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="M2.8 12h18.4M12 2.8c2.5 2.5 3.9 5.9 3.9 9.2s-1.4 6.7-3.9 9.2c-2.5-2.5-3.9-5.9-3.9-9.2S9.5 5.3 12 2.8z"/></svg>
+        <span class="lines"><span class="lead">Work with us</span><span class="under">perfecto-web.com</span></span>
+    </a>
+    <a class="button secondary" href="https://github.com/PerfectoWeb">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A7.995 7.995 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        <span class="lines"><span class="lead">Source on GitHub</span><span class="under">11 repositories</span></span>
+    </a>
+</div>
+
+<hr>
+
+<h2><svg viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> macOS</h2>
 <ul>
     <li><a href="https://perfectoweb.github.io/Belay/">
-        <span class="name">Belay<span class="where">site &middot; App Store &middot; Homebrew</span></span>
-        <span class="what">Keeps your Mac awake only while a local AI coding agent is working, and lets it sleep the moment the work stops.</span>
+        <img src="img/belay.webp" width="640" height="400" alt="Belay" loading="lazy" decoding="async">
+        <span>
+            <span class="name">Belay<span class="where">site &middot; App Store &middot; Homebrew</span></span>
+            <span class="what">Keeps your Mac awake only while a local AI coding agent is working, and lets it sleep the moment the work stops. Seven languages, no account, no telemetry.</span>
+        </span>
     </a></li>
     <li><a href="https://github.com/PerfectoWeb/Gibson">
-        <span class="name">Gibson<span class="where">GitHub</span></span>
-        <span class="what">A screen saver that turns your display into the security dashboard from every hacker film. Half of it is real: the numbers come off your machine.</span>
+        <img src="img/gibson.webp" width="640" height="400" alt="Gibson" loading="lazy" decoding="async">
+        <span>
+            <span class="name">Gibson<span class="where">GitHub</span></span>
+            <span class="what">A screen saver that turns your display into the security dashboard from every hacker film. Half of it is real: the numbers come off your machine.</span>
+        </span>
     </a></li>
 </ul>
 
-<h2>Editor extensions</h2>
+<h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.6 8.4 5 12l3.6 3.6M15.4 8.4 19 12l-3.6 3.6M13.4 6.2l-2.8 11.6"/></svg> Editor extensions</h2>
 <ul>
     <li><a href="https://github.com/PerfectoWeb/nova-perfectdark-theme">
-        <span class="name">Nova: Perfect Dark<span class="where">GitHub</span></span>
-        <span class="what">An easy-on-the-eyes dark theme for Panic's Nova.</span>
+        <img src="img/nova-dark.webp" width="640" height="400" alt="Nova: Perfect Dark" loading="lazy" decoding="async">
+        <span>
+            <span class="name">Nova: Perfect Dark<span class="where">GitHub</span></span>
+            <span class="what">An easy-on-the-eyes dark theme for Panic's Nova.</span>
+        </span>
     </a></li>
     <li><a href="https://github.com/PerfectoWeb/nova-favicon-clip">
-        <span class="name">Nova: Favicon Clip<span class="where">GitHub</span></span>
-        <span class="what">Generates the whole favicon tag set for every platform, without leaving the editor.</span>
+        <img src="img/nova-favicon.webp" width="640" height="400" alt="Nova: Favicon Clip" loading="lazy" decoding="async">
+        <span>
+            <span class="name">Nova: Favicon Clip<span class="where">GitHub</span></span>
+            <span class="what">Generates the whole favicon tag set for every platform, without leaving the editor.</span>
+        </span>
     </a></li>
     <li><a href="https://github.com/PerfectoWeb/nova-lorem-clip">
-        <span class="name">Nova: Lorem Clip<span class="where">GitHub</span></span>
-        <span class="what">Lorem ipsum without leaving the editor.</span>
+        <img src="img/nova-lorem.webp" width="640" height="400" alt="Nova: Lorem Clip" loading="lazy" decoding="async">
+        <span>
+            <span class="name">Nova: Lorem Clip<span class="where">GitHub</span></span>
+            <span class="what">Lorem ipsum without leaving the editor.</span>
+        </span>
     </a></li>
 </ul>
 
-<h2>Hardware</h2>
+<h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7.2" y="7.2" width="9.6" height="9.6" rx="1.6"/><path d="M10 3.4v3.8M14 3.4v3.8M10 16.8v3.8M14 16.8v3.8M3.4 10h3.8M3.4 14h3.8M16.8 10h3.8M16.8 14h3.8"/></svg> Hardware</h2>
 <ul>
     <li><a href="https://github.com/PerfectoWeb/flipper-pocketlab">
-        <span class="name">Flipper Zero: PocketLab<span class="where">GitHub</span></span>
-        <span class="what">A native Flipper Zero app that teaches the device's own features in bite-sized interactive lessons.</span>
+        <img src="img/pocketlab.webp" width="640" height="400" alt="Flipper Zero: PocketLab" loading="lazy" decoding="async">
+        <span>
+            <span class="name">Flipper Zero: PocketLab<span class="where">GitHub</span></span>
+            <span class="what">A native Flipper Zero app that teaches the device's own features in bite-sized interactive lessons.</span>
+        </span>
     </a></li>
     <li><a href="https://github.com/PerfectoWeb/IBM-VFD-Display-ESP32-S3">
-        <span class="name">IBM VFD Display<span class="where">GitHub</span></span>
-        <span class="what">An ESP32-S3 driving a Futaba / IBM 20x2 vacuum fluorescent customer display.</span>
+        <img src="img/ibm.webp" width="640" height="400" alt="IBM VFD Display" loading="lazy" decoding="async">
+        <span>
+            <span class="name">IBM VFD Display<span class="where">GitHub</span></span>
+            <span class="what">An ESP32-S3 driving a Futaba / IBM 20x2 vacuum fluorescent customer display.</span>
+        </span>
     </a></li>
 </ul>
 
-<h2>Installing</h2>
+<h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6v10.2M8.2 10.2 12 14l3.8-3.8M4.4 17.2v1.6a1.6 1.6 0 0 0 1.6 1.6h12a1.6 1.6 0 0 0 1.6-1.6v-1.6"/></svg> Installing</h2>
 <ul>
     <li><a href="https://github.com/PerfectoWeb/homebrew-tap">
-        <span class="name">PerfectoWeb//tap<span class="where">Homebrew</span></span>
-        <span class="what">One tap for the Mac apps, one <code>brew upgrade</code> for all of them, and uninstalls that take their preferences with them.</span>
+        <img src="img/tap.webp" width="640" height="400" alt="PerfectoWeb//tap" loading="lazy" decoding="async">
+        <span>
+            <span class="name">PerfectoWeb//tap<span class="where">Homebrew</span></span>
+            <span class="what">One tap for the Mac apps, one <code>brew upgrade</code> for all of them, and uninstalls that take their preferences with them.</span>
+        </span>
     </a></li>
 </ul>
 
 <footer>
-    <p><a href="https://github.com/PerfectoWeb">github.com/PerfectoWeb</a>
-    &middot; <a href="https://perfecto-web.com">perfecto-web.com</a></p>
+    <div class="links">
+        <a href="https://github.com/PerfectoWeb">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A7.995 7.995 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+            github.com/PerfectoWeb
+        </a>
+        <a href="https://perfecto-web.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="M2.8 12h18.4M12 2.8c2.5 2.5 3.9 5.9 3.9 9.2s-1.4 6.7-3.9 9.2c-2.5-2.5-3.9-5.9-3.9-9.2S9.5 5.3 12 2.8z"/></svg>
+            perfecto-web.com
+        </a>
+    </div>
     <p>This page counts visits with Cloudflare Web Analytics: the page, where you
     came from, the country and the browser. No cookies, and nothing is stored on
     your machine.</p>
