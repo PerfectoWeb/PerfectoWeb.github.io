@@ -304,8 +304,15 @@ li img {
     letter-spacing: 0.01em;
 }
 
-/* One of them carries weight, so it is the one the eye lands on. */
-.tags .lic { color: var(--ink); border-color: color-mix(in srgb, var(--ink) 26%, transparent); }
+/* One of them carries weight, so it is the one the eye lands on, and it is the
+   only filled chip in the row. Filled from `--ink` on `--page` rather than from
+   literal white and black, so it inverts with the theme instead of turning into
+   a glaring white pill on a light page. */
+.tags .lic {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--page);
+}
 
 /* A chip that goes somewhere is still a chip. It carries a mark instead of a
    colour: blue made it the loudest thing in the row, and a secondary link is not
@@ -334,8 +341,6 @@ li img {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    color: var(--ink);
-    border-color: color-mix(in srgb, var(--ink) 26%, transparent);
     font-variant-numeric: tabular-nums;
 }
 
