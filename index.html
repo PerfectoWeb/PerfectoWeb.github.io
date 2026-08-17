@@ -100,7 +100,7 @@ h1 {
    A minimum rather than a fixed width, so a longer translation grows the pair
    instead of clipping one of them. */
 @media (min-width: 561px) {
-    .actions .button { min-width: 250px; }
+    .actions .button { min-width: 190px; }
 }
 
 .button {
@@ -232,9 +232,11 @@ ul { margin: 16px 0 0; padding: 0; list-style: none; }
 
 li + li { margin-top: 4px; }
 
-/* One row per project: the cover on the left, the words on the right, and the
-   whole row is the link so a thumb has something to hit. */
-li a {
+/* One row per project: the cover on the left, the words on the right. The row
+   used to be a single link, which was a better tap target and stopped being
+   possible the moment a project needed a second link of its own. The title and
+   the cover both carry it now, and the row still lights up as one thing. */
+li {
     display: grid;
     grid-template-columns: 132px 1fr;
     gap: 16px;
@@ -242,17 +244,21 @@ li a {
     padding: 12px;
     margin: 0 -12px;
     border-radius: 14px;
-    color: inherit;
-    text-decoration: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    li a { transition: background 0.16s ease-out; }
+    li { transition: background 0.16s ease-out; }
 }
 
-li a:hover { background: var(--panel); }
+li:hover { background: var(--panel); }
 
-li a:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+li a { color: inherit; text-decoration: none; }
+
+.name a:focus-visible,
+.cover:focus-visible,
+.tags a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+.cover { display: block; }
 
 /* Its own radius rather than the page's, because a screenshot with square
    corners inside a rounded layout reads as something pasted on. The ratio is
@@ -266,6 +272,8 @@ li img {
     border-radius: 10px;
     background: var(--panel);
 }
+
+.name, .what, .tags { margin: 0; }
 
 .name { font-weight: 700; }
 
@@ -298,8 +306,70 @@ li img {
 /* One of them carries weight, so it is the one the eye lands on. */
 .tags .lic { color: var(--ink); border-color: color-mix(in srgb, var(--ink) 26%, transparent); }
 
+/* A chip that goes somewhere looks like it does. */
+.tags a.tag { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 34%, transparent); }
+
+@media (prefers-reduced-motion: no-preference) {
+    .tags a.tag { transition: background 0.16s ease-out; }
+}
+
+.tags a.tag:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+
+/* The number of installs. An icon and a figure, because "6,528" on its own is a
+   number with no unit, and spelling out "installs" beside every one of them
+   would crowd the row. What it means arrives on hover instead. */
+.tags .count {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--ink);
+    border-color: color-mix(in srgb, var(--ink) 26%, transparent);
+    font-variant-numeric: tabular-nums;
+}
+
+.tags .count svg { width: 12px; height: 12px; }
+
+/* Our own tooltip rather than `title`, which waits a second, cannot be styled,
+   and never appears on a touch screen at all. This one is a pseudo-element, so
+   it costs no markup and no script.
+   `position: relative` goes on the chip; the arrow is the same box rotated. */
+[data-tip] { position: relative; }
+
+[data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(3px);
+    z-index: 3;
+    width: max-content;
+    max-width: 15rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: var(--ink);
+    color: var(--page);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-align: center;
+    white-space: normal;
+    opacity: 0;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    [data-tip]::after { transition: opacity 0.14s ease-out, transform 0.14s ease-out; }
+}
+
+[data-tip]:hover::after,
+[data-tip]:focus-visible::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
 @media (max-width: 560px) {
-    li a { grid-template-columns: 96px 1fr; gap: 12px; }
+    li { grid-template-columns: 96px 1fr; gap: 12px; }
     .actions .button { flex: 1 1 100%; justify-content: flex-start; }
 }
 
@@ -362,82 +432,82 @@ public, and none of it wants an account.</p>
 
 <h2><svg viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> macOS</h2>
 <ul>
-    <li><a href="https://perfectoweb.github.io/Belay/">
-        <img src="img/belay.webp" width="640" height="400" alt="Belay" loading="lazy" decoding="async">
-        <span>
-            <span class="name">Belay<span class="where">site &middot; App Store &middot; Homebrew</span></span>
-            <span class="what">Keeps your Mac awake only while a local AI coding agent is working, and lets it sleep the moment the work stops. Seven languages, no account, no telemetry.</span>
-                    <span class="tags"><span class="lic">Source available</span><span>Free</span><span>Swift</span><span>7 languages</span></span>
-        </span>
-    </a></li>
-    <li><a href="https://github.com/PerfectoWeb/Gibson">
-        <img src="img/gibson.webp" width="640" height="400" alt="Gibson" loading="lazy" decoding="async">
-        <span>
-            <span class="name">Gibson<span class="where">GitHub</span></span>
-            <span class="what">A screen saver that turns your display into the security dashboard from every hacker film. Half of it is real: the numbers come off your machine.</span>
-                    <span class="tags"><span class="lic">MIT</span><span>Free</span><span>Swift</span></span>
-        </span>
-    </a></li>
+    <li>
+        <a class="cover" href="https://perfectoweb.github.io/Belay/" tabindex="-1" aria-hidden="true"><img src="img/belay.webp" width="640" height="400" alt="Belay" loading="lazy" decoding="async"></a>
+        <div class="text">
+            <p class="name"><a href="https://perfectoweb.github.io/Belay/">Belay</a><span class="where">site &middot; App Store &middot; Homebrew</span></p>
+            <p class="what">Keeps your Mac awake only while a local AI coding agent is working, and lets it sleep the moment the work stops. Multilingual, no account, no telemetry.</p>
+            <p class="tags"><span class="lic">Source available</span><span>Free</span><span>Swift</span><span>Multilingual</span></p>
+        </div>
+    </li>
+    <li>
+        <a class="cover" href="https://github.com/PerfectoWeb/Gibson" tabindex="-1" aria-hidden="true"><img src="img/gibson.webp" width="640" height="400" alt="Gibson" loading="lazy" decoding="async"></a>
+        <div class="text">
+            <p class="name"><a href="https://github.com/PerfectoWeb/Gibson">Gibson</a><span class="where">GitHub</span></p>
+            <p class="what">A screen saver that turns your display into the security dashboard from every hacker film. Half of it is real: the numbers come off your machine.</p>
+            <p class="tags"><span class="lic">MIT</span><span>Free</span><span>Swift</span></p>
+        </div>
+    </li>
 </ul>
 
 <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.6 8.4 5 12l3.6 3.6M15.4 8.4 19 12l-3.6 3.6M13.4 6.2l-2.8 11.6"/></svg> Editor extensions</h2>
 <ul>
-    <li><a href="https://github.com/PerfectoWeb/nova-perfectdark-theme">
-        <img src="img/nova-dark.webp" width="640" height="400" alt="Nova: Perfect Dark" loading="lazy" decoding="async">
-        <span>
-            <span class="name">Nova: Perfect Dark<span class="where">GitHub</span></span>
-            <span class="what">An easy-on-the-eyes dark theme for Panic's Nova.</span>
-                    <span class="tags"><span class="lic">MIT</span><span>Nova</span></span>
-        </span>
-    </a></li>
-    <li><a href="https://github.com/PerfectoWeb/nova-favicon-clip">
-        <img src="img/nova-favicon.webp" width="640" height="400" alt="Nova: Favicon Clip" loading="lazy" decoding="async">
-        <span>
-            <span class="name">Nova: Favicon Clip<span class="where">GitHub</span></span>
-            <span class="what">Generates the whole favicon tag set for every platform, without leaving the editor.</span>
-                    <span class="tags"><span class="lic">MIT</span><span>Nova</span></span>
-        </span>
-    </a></li>
-    <li><a href="https://github.com/PerfectoWeb/nova-lorem-clip">
-        <img src="img/nova-lorem.webp" width="640" height="400" alt="Nova: Lorem Clip" loading="lazy" decoding="async">
-        <span>
-            <span class="name">Nova: Lorem Clip<span class="where">GitHub</span></span>
-            <span class="what">Lorem ipsum without leaving the editor.</span>
-                    <span class="tags"><span class="lic">MIT</span><span>Nova</span></span>
-        </span>
-    </a></li>
+    <li>
+        <a class="cover" href="https://github.com/PerfectoWeb/nova-perfectdark-theme" tabindex="-1" aria-hidden="true"><img src="img/nova-dark.webp" width="640" height="400" alt="Nova: Perfect Dark" loading="lazy" decoding="async"></a>
+        <div class="text">
+            <p class="name"><a href="https://github.com/PerfectoWeb/nova-perfectdark-theme">Nova: Perfect Dark</a><span class="where">GitHub</span></p>
+            <p class="what">An easy-on-the-eyes dark theme for Panic's Nova.</p>
+            <p class="tags"><span class="lic">MIT</span><span>Nova</span><a class="tag site" href="https://extensions.panic.com/extensions/perfectoweb/perfectoweb.PerfectDark/">Extension Library</a><span class="tag count" data-tip="Total installs from the Nova Extension Library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.6v9.4M8.4 10.4 12 14l3.6-3.6M5 18.4h14"/></svg>6,528</span></p>
+        </div>
+    </li>
+    <li>
+        <a class="cover" href="https://github.com/PerfectoWeb/nova-favicon-clip" tabindex="-1" aria-hidden="true"><img src="img/nova-favicon.webp" width="640" height="400" alt="Nova: Favicon Clip" loading="lazy" decoding="async"></a>
+        <div class="text">
+            <p class="name"><a href="https://github.com/PerfectoWeb/nova-favicon-clip">Nova: Favicon Clip</a><span class="where">GitHub</span></p>
+            <p class="what">Generates the whole favicon tag set for every platform, without leaving the editor.</p>
+            <p class="tags"><span class="lic">MIT</span><span>Nova</span><a class="tag site" href="https://extensions.panic.com/extensions/perfectoweb/perfectoweb.favicon/">Extension Library</a><span class="tag count" data-tip="Total installs from the Nova Extension Library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.6v9.4M8.4 10.4 12 14l3.6-3.6M5 18.4h14"/></svg>4,159</span></p>
+        </div>
+    </li>
+    <li>
+        <a class="cover" href="https://github.com/PerfectoWeb/nova-lorem-clip" tabindex="-1" aria-hidden="true"><img src="img/nova-lorem.webp" width="640" height="400" alt="Nova: Lorem Clip" loading="lazy" decoding="async"></a>
+        <div class="text">
+            <p class="name"><a href="https://github.com/PerfectoWeb/nova-lorem-clip">Nova: Lorem Clip</a><span class="where">GitHub</span></p>
+            <p class="what">Lorem ipsum without leaving the editor.</p>
+            <p class="tags"><span class="lic">MIT</span><span>Nova</span><a class="tag site" href="https://extensions.panic.com/extensions/perfectoweb/perfectoweb.lorem/">Extension Library</a><span class="tag count" data-tip="Total installs from the Nova Extension Library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.6v9.4M8.4 10.4 12 14l3.6-3.6M5 18.4h14"/></svg>7,516</span></p>
+        </div>
+    </li>
 </ul>
 
 <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7.2" y="7.2" width="9.6" height="9.6" rx="1.6"/><path d="M10 3.4v3.8M14 3.4v3.8M10 16.8v3.8M14 16.8v3.8M3.4 10h3.8M3.4 14h3.8M16.8 10h3.8M16.8 14h3.8"/></svg> Hardware</h2>
 <ul>
-    <li><a href="https://github.com/PerfectoWeb/flipper-pocketlab">
-        <img src="img/pocketlab.webp" width="640" height="400" alt="Flipper Zero: PocketLab" loading="lazy" decoding="async">
-        <span>
-            <span class="name">Flipper Zero: PocketLab<span class="where">GitHub</span></span>
-            <span class="what">A native Flipper Zero app that teaches the device's own features in bite-sized interactive lessons.</span>
-                    <span class="tags"><span class="lic">MIT</span><span>C</span><span>Flipper Zero</span></span>
-        </span>
-    </a></li>
-    <li><a href="https://github.com/PerfectoWeb/IBM-VFD-Display-ESP32-S3">
-        <img src="img/ibm.webp" width="640" height="400" alt="IBM VFD Display" loading="lazy" decoding="async">
-        <span>
-            <span class="name">IBM VFD Display<span class="where">GitHub</span></span>
-            <span class="what">An ESP32-S3 driving a Futaba / IBM 20x2 vacuum fluorescent customer display.</span>
-                    <span class="tags"><span class="lic">MIT</span><span>ESP32-S3</span><span>Arduino</span></span>
-        </span>
-    </a></li>
+    <li>
+        <a class="cover" href="https://github.com/PerfectoWeb/flipper-pocketlab" tabindex="-1" aria-hidden="true"><img src="img/pocketlab.webp" width="640" height="400" alt="Flipper Zero: PocketLab" loading="lazy" decoding="async"></a>
+        <div class="text">
+            <p class="name"><a href="https://github.com/PerfectoWeb/flipper-pocketlab">Flipper Zero: PocketLab</a><span class="where">GitHub</span></p>
+            <p class="what">A native Flipper Zero app that teaches the device's own features in bite-sized interactive lessons.</p>
+            <p class="tags"><span class="lic">MIT</span><span>C</span><span>Flipper Zero</span></p>
+        </div>
+    </li>
+    <li>
+        <a class="cover" href="https://github.com/PerfectoWeb/IBM-VFD-Display-ESP32-S3" tabindex="-1" aria-hidden="true"><img src="img/ibm.webp" width="640" height="400" alt="IBM VFD Display" loading="lazy" decoding="async"></a>
+        <div class="text">
+            <p class="name"><a href="https://github.com/PerfectoWeb/IBM-VFD-Display-ESP32-S3">IBM VFD Display</a><span class="where">GitHub</span></p>
+            <p class="what">An ESP32-S3 driving a Futaba / IBM 20x2 vacuum fluorescent customer display.</p>
+            <p class="tags"><span class="lic">MIT</span><span>ESP32-S3</span><span>Arduino</span></p>
+        </div>
+    </li>
 </ul>
 
 <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6v10.2M8.2 10.2 12 14l3.8-3.8M4.4 17.2v1.6a1.6 1.6 0 0 0 1.6 1.6h12a1.6 1.6 0 0 0 1.6-1.6v-1.6"/></svg> Installing</h2>
 <ul>
-    <li><a href="https://github.com/PerfectoWeb/homebrew-tap">
-        <img src="img/tap.webp" width="640" height="400" alt="PerfectoWeb//tap" loading="lazy" decoding="async">
-        <span>
-            <span class="name">PerfectoWeb//tap<span class="where">Homebrew</span></span>
-            <span class="what">One tap for the Mac apps, one <code>brew upgrade</code> for all of them, and uninstalls that take their preferences with them.</span>
-                    <span class="tags"><span class="lic">MIT</span><span>Homebrew</span><span>Ruby</span></span>
-        </span>
-    </a></li>
+    <li>
+        <a class="cover" href="https://github.com/PerfectoWeb/homebrew-tap" tabindex="-1" aria-hidden="true"><img src="img/tap.webp" width="640" height="400" alt="PerfectoWeb//tap" loading="lazy" decoding="async"></a>
+        <div class="text">
+            <p class="name"><a href="https://github.com/PerfectoWeb/homebrew-tap">PerfectoWeb//tap</a><span class="where">Homebrew</span></p>
+            <p class="what">One tap for the Mac apps, one <code>brew upgrade</code> for all of them, and uninstalls that take their preferences with them.</p>
+            <p class="tags"><span class="lic">MIT</span><span>Homebrew</span><span>Ruby</span></p>
+        </div>
+    </li>
 </ul>
 
 <footer>
