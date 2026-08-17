@@ -68,6 +68,10 @@ header.top {
 
 header.top svg { width: 26px; height: 26px; flex: none; color: var(--accent); }
 
+/* Two weights in one word, so the name reads as two parts without a space or a
+   colour change to separate them. */
+header.top .thin { font-weight: 300; }
+
 h1 {
     margin: 32px 0 0;
     font-size: clamp(36px, 6vw, 44px);
@@ -239,7 +243,7 @@ footer p { margin: 14px 0 0; max-width: 40rem; }
 
 <header class="top">
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l1.5 5.1a4 4 0 0 0 2.7 2.7l5.2 1.6-5.2 1.6a4 4 0 0 0-2.7 2.7L12 21.4l-1.5-5.1a4 4 0 0 0-2.7-2.7L2.6 12l5.2-1.6a4 4 0 0 0 2.7-2.7L12 2.6z"/></svg>
-    PerfectoWeb
+    <span>Perfecto<span class="thin">Web</span></span>
 </header>
 
 <h1>Global Digital Agency</h1>
